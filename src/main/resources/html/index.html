@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .chat-box {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            background-color: #f9f9f9;
+        }
+        .input-area {
+            display: flex;
+        }
+        input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Demo Chat</h1>
+        <div class="chat-box" id="chatBox">
+            <p><strong>System:</strong> Welcome to the Demo Chat!</p>
+        </div>
+        <div class="input-area">
+            <input type="text" id="messageInput" placeholder="Type your message here...">
+            <button id="sendButton">Send</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('sendButton').addEventListener('click', function() {
+            sendMessage();
+        });
+
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            // @ts-ignore
+            window.demoQuery({
+                request: "Test",
+                persistent: false,
+                onSuccess: function (response) {
+                },
+                onFailure: function (errorCode, errorMessage) {
+                }
+            });
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                const chatBox = document.getElementById('chatBox');
+                const messageElement = document.createElement('p');
+                messageElement.innerHTML = `<strong>You:</strong> ${message}`;
+                chatBox.appendChild(messageElement);
+                
+                // Auto-scroll to bottom
+                chatBox.scrollTop = chatBox.scrollHeight;
+                
+                // Clear input
+                input.value = '';
+                
+                // Simulate response
+                setTimeout(() => {
+                    const responseElement = document.createElement('p');
+                    responseElement.innerHTML = `<strong>System:</strong> You said: "${message}"`;
+                    chatBox.appendChild(responseElement);
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }, 1000);
+            }
+        }
+    </script>
+</body>
+</html>
